@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration</title>
+    <link rel="stylesheet" href="styles/basestyle.css">
+    <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+    <header class="main-header" role="banner">
+        <div class="header-left">
+            <img src="icons/logo.svg" alt="App logo" class="logo" />
+            <h1 class="site-name">Student Registration</h1>
+        </div>
+        <div class="header-center">
+            <div class="search-container" role="search">
+                <label for="search" class="sr">Search students</label>
+                <img src="icons/search.svg" alt="" class="icon search-icon" aria-hidden="true" />
+                <input id="search" class="search-bar" type="search" placeholder="Search by name, email, programme, year, interests" autocomplete="off" />
+                <button id="searchClear" class="search-btn" type="button" title="Clear search" aria-label="Clear search">
+                    <img src="icons/clear.svg" alt="" class="icon" aria-hidden="true" />
+                    <span class="sr">Clear</span>
+                </button>
+                <div id="searchResults" class="search-results" role="listbox" aria-label="Search results" hidden></div>
+            </div>
+        </div>
+        <div class="header-right">
+            <button id="themeToggle" class="settings-btn" type="button" aria-pressed="false" title="Toggle theme">
+                <img src="icons/moon.svg" alt="Toggle theme" class="settings-icon" />
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section class="container" aria-labelledby="howto-title">
+            <details open>
+                <summary id="howto-title" class="section-title">How to use</summary>
+                <p class="section-description">This is a single-file app. Open <code>index.html</code> in your browser. Fill the form to add a student. Use Edit/Delete on cards or table. Search filters both views. Data persists via localStorage.</p>
+            </details>
+        </section>
+
+        <section class="container registration-container" aria-labelledby="reg-title">
+            <div>
+                <h2 id="reg-title" class="section-title">Register Student</h2>
+                <p class="section-description">All required fields are marked with <span class="required" aria-hidden="true">*</span>.</p>
+            </div>
+            <form id="regForm" class="registration-form" novalidate>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label" for="firstName">First name <span class="required" aria-hidden="true">*</span></label>
+                        <input id="firstName" name="firstName" class="form-input" type="text" placeholder="e.g. Jaden" autocomplete="given-name" required />
+                        <small id="err-firstName" class="error-message" aria-live="polite"></small>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="lastName">Last name <span class="required" aria-hidden="true">*</span></label>
+                        <input id="lastName" name="lastName" class="form-input" type="text" placeholder="e.g. Awaseb" autocomplete="family-name" required />
+                        <small id="err-lastName" class="error-message" aria-live="polite"></small>
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="form-label" for="email">Email <span class="required" aria-hidden="true">*</span></label>
+                        <input id="email" name="email" class="form-input" type="email" placeholder="e.g. jaden@example.com" autocomplete="email" required />
+                        <small id="err-email" class="error-message" aria-live="polite"></small>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="programme">Programme <span class="required" aria-hidden="true">*</span></label>
+                        <select id="programme" name="programme" class="form-select" required>
+                            <option value="" selected disabled>Choose a programme</option>
+                            <option>Computer Science</option>
+                            <option>Information Technology</option>
+                            <option>Software Engineering</option>
+                            <option>Cybersecurity</option>
+                            <option>Data Science</option>
+                        </select>
+                        <small id="err-programme" class="error-message" aria-live="polite"></small>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="yearOfStudy">Year of Study <span class="required" aria-hidden="true">*</span></label>
+                        <select id="yearOfStudy" name="yearOfStudy" class="form-select" required>
+                            <option value="" selected disabled>Choose a year</option>
+                            <option value="1">Year 1</option>
+                            <option value="2">Year 2</option>
+                            <option value="3">Year 3</option>
+                            <option value="4">Year 4</option>
+                        </select>
+                        <small id="err-yearOfStudy" class="error-message" aria-live="polite"></small>
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="form-label" for="interests">Interests</label>
+                        <textarea id="interests" name="interests" rows="3" placeholder="e.g., Web Dev, AI, Gaming" aria-describedby="hint-interests"></textarea>
+                        <small id="hint-interests" class="form-hint">Comma-separated list, optional.</small>
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="form-label" for="photoUrl">Photo URL</label>
+                        <input id="photoUrl" name="photoUrl" class="form-input" type="url" placeholder="https://example.com/avatar.jpg" />
+                        <small id="err-photoUrl" class="error-message" aria-live="polite"></small>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button id="submitBtn" class="btn btn-primary" type="submit">
+                        <span class="btn-text">Add Student</span>
+                        <img src="icons/loading-spinner.svg" class="btn-spinner icon" alt="" aria-hidden="true" />
+                    </button>
+                    <button id="resetBtn" class="btn btn-secondary" type="reset">Reset</button>
+                    <button id="cancelEditBtn" class="btn" type="button" hidden>Cancel Edit</button>
+                </div>
+                <div id="live" class="sr" aria-live="polite"></div>
+                <div id="success" class="success-message" role="status" aria-live="polite">
+                    <div class="success-content"><img class="success-icon icon" src="icons/check.svg" alt="" aria-hidden="true" /><span id="successText">Saved.</span></div>
+                </div>
+            </form>
+        </section>
+
+        <section class="students-section" aria-labelledby="students-title">
+            <div class="students-header">
+                <h2 id="students-title" class="section-title">Students</h2>
+                <p class="subtle"><span id="studentCount">0</span> total</p>
+            </div>
+            <div id="cards" class="cards" aria-live="polite"></div>
+
+            <div class="table-wrap" aria-label="Students summary table">
+                <table id="summary">
+                    <thead>
+                        <tr>
+                            <th scope="col">Photo</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Programme</th>
+                            <th scope="col">Year</th>
+                            <th scope="col">Interests</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer" role="contentinfo">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="icons/logo.svg" class="footer-logo-img" alt="App logo" />
+                <span>Cheese Enterprises</span>
+            </div>
+            <div>
+                <p class="subtle">Built with semantic HTML, CSS variables, and vanilla JS. No external libraries.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-bottom-content">
+                <span class="subtle">© <span id="yearNow"></span></span>
+                <a class="subtle" href="#regForm">Back to form</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="scripts/main.js" defer></script>
+</body>
+</html>

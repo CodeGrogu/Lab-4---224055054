@@ -1,0 +1,24 @@
+[
+	{
+		"id": "d2c5f2f2-7a8f-4f2a-9fd4-0f8a6a6f6a60",
+		"firstName": "Ada",
+		"lastName": "Lovelace",
+		"email": "ada@example.com",
+		"programme": "Computer Science",
+		"yearOfStudy": "3",
+		"interests": "Math, Engines",
+		"photoUrl": "https://i.pravatar.cc/100?img=5",
+		"registrationDate": "2025-09-06T10:00:00.000Z"
+	},
+	{
+		"id": "4b7f0e52-1eab-47d2-8c0a-5b3f85fbd1b7",
+		"firstName": "Alan",
+		"lastName": "Turing",
+		"email": "alan@example.com",
+		"programme": "Software Engineering",
+		"yearOfStudy": "2",
+		"interests": "Logic, Cryptography",
+		"photoUrl": "https://i.pravatar.cc/100?img=15",
+		"registrationDate": "2025-09-06T10:00:00.000Z"
+	}
+]
