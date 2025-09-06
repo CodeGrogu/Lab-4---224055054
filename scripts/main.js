@@ -111,40 +111,6 @@
     }
     function saveStudents(list) { localStorage.setItem(LS_KEY, JSON.stringify(list)); }
 
-    // API helpers (PHP). Keep very simple and fail back to localStorage.
-    const API_URL = 'api/students.php';
-    async function apiLoad() {
-        try {
-            const res = await fetch(API_URL, { headers: { 'Accept': 'application/json' } });
-            if (!res.ok) throw new Error('HTTP ' + res.status);
-            return await res.json();
-        } catch {
-            return null; // signal fallback
-        }
-    }
-    async function apiUpsert(student) {
-        try {
-            const res = await fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'upsert', payload: student })
-            });
-            if (!res.ok) throw new Error('HTTP ' + res.status);
-            return await res.json();
-        } catch { return null; }
-    }
-    async function apiDelete(id) {
-        try {
-            const res = await fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'delete', payload: { id } })
-            });
-            if (!res.ok) throw new Error('HTTP ' + res.status);
-            return await res.json();
-        } catch { return null; }
-    }
-
     // Theme
     function applyTheme(t) {
         const root = document.documentElement;
@@ -287,29 +253,20 @@
         let editingId = null;
         render(students);
 
-        // Try to load from server; if available, it becomes the source of truth.
-        (async () => {
-            const remote = await apiLoad();
-            if (Array.isArray(remote)) {
-                students = remote;
-                saveStudents(students); // keep local mirror
-                render(applyFilter(students, document.getElementById('search').value || ''));
-            }
-        })();
-
     const form = document.getElementById('regForm');
         const submitBtn = document.getElementById('submitBtn');
         const cancelEditBtn = document.getElementById('cancelEditBtn');
         const success = document.getElementById('success');
         const successText = document.getElementById('successText');
 
-        // JSON seed/sync removed.
+    // JSON seed/sync removed.
 
         // Live email validation
         form.addEventListener('input', (e) => {
             const t = e.target;
             if (!(t instanceof HTMLElement)) return;
-            if (t.id === 'email') {
+            const id = t.id;
+            if (id === 'email') {
                 const v = t.value.trim();
                 if (!v) setError('err-email', '');
                 else if (!emailRe.test(v)) setError('err-email', 'Enter a valid email.');
@@ -345,7 +302,7 @@
             $('#live').textContent = '';
         });
 
-        form.addEventListener('submit', async (e) => {
+        form.addEventListener('submit', (e) => {
             e.preventDefault();
             // If form is disabled (rare on mobile), bail and announce
             if (form.hasAttribute('disabled')) {
@@ -355,13 +312,7 @@
             }
             const payload = formData();
             if (!validate(form, students, editingId)) return;
-            // Optimistic local update
             students = upsert(students, payload);
-            // Persist to server (best-effort)
-            const resp = await apiUpsert(payload);
-            if (resp && resp.ok && resp.student) {
-                students = upsert(students, resp.student);
-            }
             const q = $('#search').value || '';
             render(applyFilter(students, q));
             if (success) {
@@ -546,13 +497,7 @@
             } else if (isDelete) {
                 const ok = confirm(`Delete ${s.firstName} ${s.lastName}?`);
                 if (!ok) return;
-                const resp = await apiDelete(id);
-                if (resp && resp.ok) {
-                    students = removeById(students, id);
-                } else {
-                    // fallback local
-                    students = removeById(students, id);
-                }
+                students = removeById(students, id);
                 const q = $('#search').value || '';
                 render(applyFilter(students, q));
                 $('#live').textContent = 'Student deleted.';
