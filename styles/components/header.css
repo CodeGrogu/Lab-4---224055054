@@ -7,7 +7,7 @@
 }
 .header-left { display:flex; align-items:center; gap:10px; justify-self: start; }
 .logo { width: var(--header-control-h); height: var(--header-control-h); }
-.site-name { font-size: 20px; margin: 0; letter-spacing: .5px; }
+.site-name { font-size: 20px; margin: 0 0 2px 10px; letter-spacing: .5px; }
 .header-center { display:flex; justify-content:center; }
 .header-right { display:flex; justify-content:end; justify-self: end; }
 .settings-btn {
