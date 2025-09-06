@@ -1,0 +1,14 @@
+/* Students Section & Cards */
+.students-section { margin-top: 22px; display: grid; gap: 12px; }
+.students-header { display:flex; justify-content: space-between; align-items: center; }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.card { background: linear-gradient(180deg, var(--panel) 0%, var(--card-bg-2) 100%); border: 1px solid var(--border); border-radius: 14px; padding: 14px; box-shadow: var(--shadow); display: grid; gap: 10px; }
+.card-head { display:flex; align-items:center; gap: 12px; }
+.avatar { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--avatar-border); background: var(--avatar-bg); }
+.avatar-sm { width: 36px; height: 36px; border-width: 1px; }
+.title { margin: 0; font-size: 18px; }
+.pill { display:inline-block; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--avatar-border); background: var(--pill-bg); color: var(--muted); font-size: 12px; }
+.card-actions { display:flex; gap: 8px; }
+.btn-danger { background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger-text); }
+.btn-danger:hover { filter: brightness(1.1); }

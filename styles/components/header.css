@@ -1,0 +1,22 @@
+/* Header */
+.main-header {
+    position: sticky; top: 0; z-index: 10;
+    display: grid; grid-template-columns: 1fr minmax(0, clamp(320px, 60vw, 720px)) 1fr; align-items: center;
+    gap: 16px; padding: 14px 20px; background: var(--header-bg); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+}
+.header-left { display:flex; align-items:center; gap:10px; justify-self: start; }
+.logo { width: var(--header-control-h); height: var(--header-control-h); }
+.site-name { font-size: 20px; margin: 0; letter-spacing: .5px; }
+.header-center { display:flex; justify-content:center; }
+.header-right { display:flex; justify-content:end; justify-self: end; }
+.settings-btn {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    width: var(--header-control-h);
+    height: var(--header-control-h);
+    padding: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer;
+}

@@ -1,0 +1,7 @@
+/* Modal */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: none; align-items: center; justify-content: center; padding: 20px; }
+.modal { width: 100%; max-width: 560px; background: var(--modal-bg); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); }
+.modal-head { display:flex; justify-content: space-between; align-items:center; padding: 12px 14px; border-bottom: 1px solid var(--border); }
+.modal-body { padding: 14px; display: grid; gap: 10px; }
+.icon-btn { background: transparent; border: 1px solid var(--border); border-radius: 10px; color: var(--muted); cursor: pointer; padding: 6px 10px; }
+.icon-btn:hover { color: var(--text); border-color: var(--hover-border); }
