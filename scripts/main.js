@@ -216,7 +216,16 @@
         const tbody = $('#summary tbody');
         const cards = $('#cards');
         const count = $('#studentCount');
-        tbody.innerHTML = list.map(trStudent).join('');
+        if (!list.length) {
+            tbody.innerHTML = `<tr class="empty"><td colspan="8">
+                <div class="table-empty">
+                        <img class="empty-gif" src="gif/dogrunning.gif" alt="Nothing here yet" onerror="this.style.display='none'"/>
+                    <div class="empty-text">No students yet. Add one above.</div>
+                </div>
+            </td></tr>`;
+        } else {
+            tbody.innerHTML = list.map(trStudent).join('');
+        }
         cards.innerHTML = list.map(cardStudent).join('');
         wireAvatarFallbacks(document);
         if (count) count.textContent = String(list.length);

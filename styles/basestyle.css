@@ -288,6 +288,12 @@ tbody td { padding: 8px; border-bottom: 1px solid var(--tbody-border); vertical-
 #summary .btn .icon { width: 16px; height: 16px; }
 tbody tr:hover { background: var(--row-hover-bg); }
 
+/* Empty table state */
+tr.empty td { padding: 24px; text-align: center; }
+.table-empty { display: grid; place-items: center; gap: 10px; }
+.table-empty img.empty-gif { max-width: 220px; width: 100%; height: auto; border-radius: 10px; box-shadow: var(--shadow); }
+.table-empty .empty-text { color: var(--muted); }
+
 /* Modal */
 .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: none; align-items: center; justify-content: center; padding: 20px; }
 .modal { width: 100%; max-width: 560px; background: var(--modal-bg); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); }
