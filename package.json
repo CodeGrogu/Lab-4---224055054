@@ -1,0 +1,12 @@
+{
+  "name": "lab-4-224055054",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "mongodb": "^6.19.0"
+  }
+}

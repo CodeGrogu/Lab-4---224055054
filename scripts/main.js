@@ -111,6 +111,38 @@
     }
     function saveStudents(list) { localStorage.setItem(LS_KEY, JSON.stringify(list)); }
 
+    // Simple Node API client (Mongo-backed). Falls back to local if unavailable.
+    const API_URL = (window.API_BASE || '/api/students');
+    async function apiLoad() {
+        try {
+            const res = await fetch(API_URL, { headers: { 'Accept': 'application/json' } });
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return await res.json();
+        } catch { return null; }
+    }
+    async function apiUpsert(student) {
+        try {
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'upsert', payload: student })
+            });
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return await res.json();
+        } catch { return null; }
+    }
+    async function apiDelete(id) {
+        try {
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'delete', payload: { id } })
+            });
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return await res.json();
+        } catch { return null; }
+    }
+
     // Theme
     function applyTheme(t) {
         const root = document.documentElement;
@@ -262,6 +294,16 @@
         let editingId = null;
         render(students);
 
+        // Try to hydrate from server if available
+        (async () => {
+            const remote = await apiLoad();
+            if (Array.isArray(remote)) {
+                students = remote;
+                saveStudents(students);
+                render(applyFilter(students, document.getElementById('search')?.value || ''));
+            }
+        })();
+
     const form = document.getElementById('regForm');
         const submitBtn = document.getElementById('submitBtn');
         const cancelEditBtn = document.getElementById('cancelEditBtn');
@@ -311,7 +353,7 @@
             $('#live').textContent = '';
         });
 
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
             // If form is disabled (rare on mobile), bail and announce
             if (form.hasAttribute('disabled')) {
@@ -321,7 +363,13 @@
             }
             const payload = formData();
             if (!validate(form, students, editingId)) return;
+            // Optimistic local update
             students = upsert(students, payload);
+            // Persist best-effort to server
+            const resp = await apiUpsert(payload);
+            if (resp && resp.ok && resp.student) {
+                students = upsert(students, resp.student);
+            }
             const q = $('#search').value || '';
             render(applyFilter(students, q));
             if (success) {
@@ -506,7 +554,12 @@
             } else if (isDelete) {
                 const ok = confirm(`Delete ${s.firstName} ${s.lastName}?`);
                 if (!ok) return;
-                students = removeById(students, id);
+                const resp = await apiDelete(id);
+                if (resp && resp.ok) {
+                    students = removeById(students, id);
+                } else {
+                    students = removeById(students, id);
+                }
                 const q = $('#search').value || '';
                 render(applyFilter(students, q));
                 $('#live').textContent = 'Student deleted.';
